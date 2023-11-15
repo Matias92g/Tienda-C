@@ -10,7 +10,7 @@ export const Item = ({ item }) => {
                 <Card.Img variant="top" src={item.img} />
                 <Card.Text>{item.description}</Card.Text>
                 <Card.Text>{item.price}</Card.Text>
-                <Link to={`/item/${item.id}`}><Button variant="success">Agregar al Carrito</Button></Link>
+                <Link to={`/item/${item.id}`}><Button variant="success">Ver datalles</Button></Link>
             </Card.Body>
         </Card>
     )
