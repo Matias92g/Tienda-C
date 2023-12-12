@@ -3,13 +3,13 @@ import Container from 'react-bootstrap/Container';
 import { products } from "../data/products.js";
 import { ItemList } from './ItemList';
 import { useParams } from 'react-router-dom';
+import { CartContext } from '../contexts/CartContext.jsx';
 
 export const ItemListContainer = () => {
 
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const { id } = useParams();
-
     useEffect(() => {
         const promise = new Promise((resolve, reject) => {
             setTimeout(() => {
