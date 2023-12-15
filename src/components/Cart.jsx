@@ -11,7 +11,7 @@ export const Cart = () => {
     const [buyer, setBuyer] = useState(clearValues);
 
     const total = items.reduce((acumulado, actual) => {
-        return acumulado + actual.precio * actual.quantity;
+        return acumulado + actual.price * actual.quantity;
     }, 0)
 
     const handleSendOrder = () => {
@@ -52,7 +52,8 @@ export const Cart = () => {
                                 <Card.Text className="text-success">{item.description} </Card.Text>
                                 <Card.Text className="text-success">Precio por unidad ${item.price}</Card.Text>
                                 <Card.Img variant="top" src={item.img} alt={item.description} width={100} />
-                                <Card.Text className="text-success">Precio total del producto:${item.price * item.quantity} </Card.Text>
+                                <Card.Text className="text-success">Cantidad a comprar: {item.quantity}</Card.Text>
+                                <Card.Text className="text-success">Precio total: {item.price * item.quantity} </Card.Text>
                                 <div className=" p-1 d-flex justify-content-center">
                                     <button className="btn btn-success m-2 text-center" onClick={() => removeItem(item.id)}>Eliminar producto del carrito</button>
                                 </div>
@@ -64,11 +65,11 @@ export const Cart = () => {
             <div className="col-6 mx-auto mb-5">
                 <form >
                     <div>
-                        <label>Nombre</label>
+                        <label className="text-success">Nombre</label>
                         <input type="text" className="form-control" name="name" value={buyer.name} onChange={handleChange} required />
                     </div>
                     <div>
-                        <label>Telefono</label>
+                        <label className="text-success">Telefono</label>
                         <input
                             type="text"
                             name="telefono"
@@ -79,7 +80,7 @@ export const Cart = () => {
                         />
                     </div>
                     <div>
-                        <label>Email</label>
+                        <label className="text-success">Email</label>
                         <input
                             type="email"
                             name="email"
@@ -90,7 +91,7 @@ export const Cart = () => {
                         />
                     </div>
                 </form>
-                <h2 className="text-success mt-3">Total carrito: ${total}</h2>
+                <p className="text-success">Total Carrito: $ {total}</p>
             </div>
             <div className="d-flex justify-content-center">
                 {items.length == 0 ? (
