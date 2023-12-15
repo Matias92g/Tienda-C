@@ -1,25 +1,31 @@
 import { useContext, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-
-import { products } from "../data/products";
 import { CartContext } from "../contexts/CartContext";
+import { getFirestore, getDoc, doc } from "firebase/firestore";
+import { ItemCounter } from "./ItemCount"
+
 
 export const ItemDetailsContainer = () => {
     const [item, setItem] = useState(null);
+    const [loading, setLoading] = useState(true);
     const { id } = useParams();
     const { addItem } = useContext(CartContext);
 
     useEffect(() => {
-        const promise = new Promise((resolve, reject) => {
-            setTimeout(() => {
-                resolve(products);
-            }, 2000)
-        });
-        promise.then((response) => {
-            const filteres = response.find((item) => item.id == id);
-            setItem(filteres)
-        });
+        const db = getFirestore();
+        const refDoc = doc(db, "items", id);
+        getDoc(refDoc).then((snapshot) => {
+            setItem({ id: snapshot.id, ...snapshot.data() });
+
+        }).finally(() => setLoading(false))
     }, [id]);
+    if (loading) {
+        return <>Loading</>
+    }
+
+    const add = (quantity) => {
+        addItem(item, quantity);
+    };
 
 
     return (
@@ -27,6 +33,7 @@ export const ItemDetailsContainer = () => {
             <h1>{item?.title}</h1>
             <img src={item?.img} width={400} />
             <p >{item?.details} </p>
-            <button onClick={()=> addItem(item)} >Agregar al Carrito</button>
+            <h4 className="text-success">Stock disponible: {item.stock} Uds</h4>
+            <ItemCounter valueInitial={1} stock={item.stock} addItem={add} />
         </div>)
 }

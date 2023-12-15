@@ -1,28 +1,29 @@
 import { useState, useEffect } from 'react';
 import Container from 'react-bootstrap/Container';
-import { products } from "../data/products.js";
 import { ItemList } from './ItemList';
 import { useParams } from 'react-router-dom';
-import { CartContext } from '../contexts/CartContext.jsx';
+import { getFirestore, getDocs, collection, query, where} from "firebase/firestore";
+
 
 export const ItemListContainer = () => {
 
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const { id } = useParams();
+
     useEffect(() => {
-        const promise = new Promise((resolve, reject) => {
-            setTimeout(() => {
-                resolve(products);
-            }, 2000)
+        setLoading(true);
+        const db = getFirestore();
+        const rerCollection = id
+        ? query (collection(db, "items"), where ("category", "==", id))
+        : collection(db, "items");
+
+        getDocs(rerCollection).then((snapshot) => {
+            setItems(snapshot.docs.map((doc) => {
+                return { id: doc.id, ...doc.data(), };
+            }));
+            setLoading(false);
         });
-        promise.then((response) => {
-            if (id) {
-                const filteres = response.filter(item => item.category === id);
-                setItems(filteres)
-            } else { setItems(response) }
-        });
-        promise.finally(() => setLoading(false))
     }, [id]);
 
     return (

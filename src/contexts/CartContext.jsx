@@ -18,8 +18,6 @@ export const CartProvider = ({ children }) => {
             setItems((prev) => { return prev.concat({ ...item, quantity }) });
 
         }
-
-        setItems((prev) => { return [...prev, item] })
     };
     const isInCart = (item) => {
         return items.some((items) => items.id === item.id);
